@@ -1,0 +1,10 @@
+web-server:
+    build: web-server
+    links:
+    - web-app
+    ports:
+    - "8080:80"
+web-app:
+    build: web-app
+    volumes:
+    - "./web-app/app:/var/www:Z"
