@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "authors": [
+    "Nicolas De los Santos <ndls05@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./public/components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.2.3",
+    "webix": "~3.0.4",
+    "jquery": "~2.1.4"
+  }
+}
