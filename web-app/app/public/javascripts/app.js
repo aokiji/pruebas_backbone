@@ -8,7 +8,11 @@ var Cliente = Backbone.Model.extend({
 });
 
 Clientes = Backbone.Collection.extend({
-    model: Cliente
+    model: Cliente,
+    url: '/clientes_eolica',
+    parse: function(data) {
+        return data.list;
+    }
 });
 
 webix.ready(function(){
