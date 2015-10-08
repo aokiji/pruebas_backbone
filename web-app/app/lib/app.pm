@@ -6,7 +6,7 @@ our $VERSION = '0.1';
 set serializer => 'JSON';
 
 get '/' => sub {
-    template 'index';
+    send_file 'index.html';
 };
 
 get '/clientes_eolica' => sub {
