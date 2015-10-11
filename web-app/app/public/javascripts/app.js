@@ -9,22 +9,39 @@ var Cliente = Backbone.Model.extend({
 
 Clientes = Backbone.Collection.extend({
     model: Cliente,
-    url: '/clientes_eolica',
-    parse: function(data) {
-        return data.list;
-    }
+    url: 'api/clientes',
 });
+
+var SelectorClientes = Backbone.View.extend({
+    initialize: function() {
+        this.listenTo(this.collection, 'sync', this.render);
+        this.component = webix.ui({
+            isolate: true,
+            view: 'combo',
+            label: 'Cliente'
+            }, this.el);
+    },
+    render: function() {
+        this.component.define('suggest', this.collection.map(function(e){return e.id}));
+        this.component.refresh();
+    },
+});
+
+var clientes = new Clientes();
+
 
 webix.ready(function(){
     vista = new WebixView({ 
         config: {
             type: "wide", cols: [
-            { template: "left", width: 300 },
+            { template: "<div class='selector_clientes' style='height: 100%'></div>", width: 300 },
             { type: "wide", rows: [
                 { template: "top", height: 150 },
                 { template: "bottom" }]}]},
         el: ".app"});
 
     vista.render();
+    sel = new SelectorClientes({el: ".selector_clientes", collection: clientes});
+    clientes.fetch();
 });
 
