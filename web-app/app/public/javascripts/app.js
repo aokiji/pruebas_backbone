@@ -12,19 +12,25 @@ Clientes = Backbone.Collection.extend({
     url: 'api/clientes',
 });
 
-var SelectorClientes = Backbone.View.extend({
+var SelectorClientes = WebixView.extend({
     initialize: function() {
         this.listenTo(this.collection, 'sync', this.render);
-        this.component = webix.ui({
-            isolate: true,
-            view: 'combo',
-            label: 'Cliente'
-            }, this.el);
     },
-    render: function() {
-        this.component.define('suggest', this.collection.map(function(e){return e.id}));
-        this.component.refresh();
+    tagName: "div",
+    config: {
+        isolate: true,
+        view: "combo",
+        label: 'Cliente'
     },
+    beforeRender: function() {
+        this.config.suggest = this.collection.map(function(e){return e.id});
+    },
+    afterRender: function() {
+        this.getRoot().attachEvent("onChange",_.bind(this.select, this));
+    },
+    select: function(e) {
+        this.trigger("select", e);
+    }
 });
 
 var clientes = new Clientes();
@@ -34,14 +40,16 @@ webix.ready(function(){
     vista = new WebixView({ 
         config: {
             type: "wide", cols: [
-            { template: "<div class='selector_clientes' style='height: 100%'></div>", width: 300 },
+            { type: "wide", width:300, height: "100%", rows: [
+                { template: "left", id:"left" }]},
             { type: "wide", rows: [
-                { template: "top", height: 150 },
+                { template: "top", height: 150, id: "top" },
                 { template: "bottom" }]}]},
         el: ".app"});
 
     vista.render();
-    sel = new SelectorClientes({el: ".selector_clientes", collection: clientes});
     clientes.fetch();
+    var sel = new SelectorClientes({el: $$("left"), collection: clientes});
+    sel.on("select", function(e){console.log(e)});
 });
 
